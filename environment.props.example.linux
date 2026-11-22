@@ -1,0 +1,19 @@
+<Project>
+  <PropertyGroup>
+    <!-- Linux example. Copy to environment.props (gitignored). Machine paths only. UNTESTED on a real Linux box. -->
+    <ValheimGamePath>$(HOME)/.local/share/Steam/steamapps/common/Valheim</ValheimGamePath>
+    <R2ModPath>$(HOME)/.config/r2modmanPlus-local/Valheim/profiles</R2ModPath>
+    <!-- Gale: build deploys here when set (same ProfileName as r2). -->
+    <GaleModPath>$(HOME)/.local/share/com.kesomannen.gale/valheim/profiles</GaleModPath>
+    <ProfileName>drakeTest</ProfileName>
+
+    <BepInExPath>$(GaleModPath)/$(ProfileName)/BepInEx</BepInExPath>
+    <BEPINEX_PATH>$(BepInExPath)</BEPINEX_PATH>
+    <VALHEIM_INSTALL>$(ValheimGamePath)</VALHEIM_INSTALL>
+    <CorlibPath>$(ValheimGamePath)/valheim_Data/Managed</CorlibPath>
+    <PublicizedAssembliesPath>$(ValheimGamePath)/valheim_Data/Managed/publicized_assemblies</PublicizedAssembliesPath>
+
+    <!-- The Windows post-build steps shell out to PowerShell; skip them here. build-linux.sh also zips the package. -->
+    <CI_SKIP_POST_BUILD>true</CI_SKIP_POST_BUILD>
+  </PropertyGroup>
+</Project>
