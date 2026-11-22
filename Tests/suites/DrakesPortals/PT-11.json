@@ -1,0 +1,132 @@
+{
+  "name": "PT-11 The glow shows the direction",
+  "description": "",
+  "steps": [
+    {
+      "do": "spawn",
+      "prefab": "portal_wood",
+      "dx": 3,
+      "dz": 3,
+      "as": "a"
+    },
+    {
+      "do": "spawn",
+      "prefab": "portal_wood",
+      "dx": -3,
+      "dz": 3,
+      "as": "b"
+    },
+    {
+      "do": "wait",
+      "seconds": 0.5
+    },
+    {
+      "do": "hook",
+      "name": "portals.setTag",
+      "args": {
+        "tag": "pair",
+        "target": "a"
+      }
+    },
+    {
+      "do": "hook",
+      "name": "portals.setTag",
+      "args": {
+        "tag": "pair",
+        "target": "b"
+      }
+    },
+    {
+      "do": "wait",
+      "seconds": 5
+    },
+    {
+      "do": "hook",
+      "name": "portals.linked",
+      "args": {
+        "target": "a"
+      },
+      "expect": true,
+      "label": "portal A is linked"
+    },
+    {
+      "do": "hook",
+      "name": "portals.linked",
+      "args": {
+        "target": "b"
+      },
+      "expect": true,
+      "label": "portal B is linked",
+      "stop": true
+    },
+    {
+      "do": "hook",
+      "name": "portals.setDirection",
+      "args": {
+        "direction": "Entry",
+        "target": "a"
+      },
+      "expect": true,
+      "label": "ask the server: Entry"
+    },
+    {
+      "do": "wait",
+      "seconds": 1.5
+    },
+    {
+      "do": "wait",
+      "seconds": 1
+    },
+    {
+      "do": "hook",
+      "name": "portals.glow",
+      "args": {
+        "target": "a"
+      },
+      "expect": "89,217,255",
+      "label": "the entry glows the entry colour"
+    },
+    {
+      "do": "hook",
+      "name": "portals.glow",
+      "args": {
+        "target": "b"
+      },
+      "expect": "255,140,51",
+      "label": "the exit glows the exit colour"
+    },
+    {
+      "do": "hook",
+      "name": "portals.setDirection",
+      "args": {
+        "direction": "TwoWay",
+        "target": "a"
+      },
+      "expect": true,
+      "label": "ask the server: TwoWay"
+    },
+    {
+      "do": "wait",
+      "seconds": 1.5
+    },
+    {
+      "do": "wait",
+      "seconds": 1
+    },
+    {
+      "do": "hook",
+      "name": "portals.glow",
+      "args": {
+        "target": "b"
+      },
+      "notContains": "255,140,51",
+      "label": "back to the normal glow"
+    }
+  ],
+  "asserts": [
+    {
+      "check": "noErrors",
+      "source": "DrakesPortals"
+    }
+  ]
+}

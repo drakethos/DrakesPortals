@@ -1,0 +1,119 @@
+{
+  "name": "PT-04 Exit on A makes B the entry",
+  "description": "",
+  "steps": [
+    {
+      "do": "spawn",
+      "prefab": "portal_wood",
+      "dx": 3,
+      "dz": 3,
+      "as": "a"
+    },
+    {
+      "do": "spawn",
+      "prefab": "portal_wood",
+      "dx": -3,
+      "dz": 3,
+      "as": "b"
+    },
+    {
+      "do": "wait",
+      "seconds": 0.5
+    },
+    {
+      "do": "hook",
+      "name": "portals.setTag",
+      "args": {
+        "tag": "pair",
+        "target": "a"
+      }
+    },
+    {
+      "do": "hook",
+      "name": "portals.setTag",
+      "args": {
+        "tag": "pair",
+        "target": "b"
+      }
+    },
+    {
+      "do": "wait",
+      "seconds": 5
+    },
+    {
+      "do": "hook",
+      "name": "portals.linked",
+      "args": {
+        "target": "a"
+      },
+      "expect": true,
+      "label": "portal A is linked"
+    },
+    {
+      "do": "hook",
+      "name": "portals.linked",
+      "args": {
+        "target": "b"
+      },
+      "expect": true,
+      "label": "portal B is linked",
+      "stop": true
+    },
+    {
+      "do": "hook",
+      "name": "portals.setDirection",
+      "args": {
+        "direction": "Exit",
+        "target": "a"
+      },
+      "expect": true,
+      "label": "ask the server: Exit"
+    },
+    {
+      "do": "wait",
+      "seconds": 1.5
+    },
+    {
+      "do": "hook",
+      "name": "portals.direction",
+      "args": {
+        "target": "a"
+      },
+      "expect": "Exit",
+      "label": "A is the exit"
+    },
+    {
+      "do": "hook",
+      "name": "portals.direction",
+      "args": {
+        "target": "b"
+      },
+      "expect": "Entry",
+      "label": "B became the entry"
+    },
+    {
+      "do": "hook",
+      "name": "portals.blocked",
+      "args": {
+        "target": "a"
+      },
+      "expect": true,
+      "label": "A refuses players"
+    },
+    {
+      "do": "hook",
+      "name": "portals.blocked",
+      "args": {
+        "target": "b"
+      },
+      "expect": false,
+      "label": "B can be stepped into"
+    }
+  ],
+  "asserts": [
+    {
+      "check": "noErrors",
+      "source": "DrakesPortals"
+    }
+  ]
+}

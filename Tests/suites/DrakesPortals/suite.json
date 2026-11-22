@@ -1,0 +1,38 @@
+{
+  "name": "DrakesPortals",
+  "description": "One-way portals: linked pairs, Entry / Exit, the Shift+E menu, who may change them, and what the portal shows.",
+  "requireMods": [
+    {
+      "guid": "com.drakemods.portals",
+      "minVersion": "0.1.0"
+    }
+  ],
+  "configOverrides": [
+    {
+      "guid": "com.drakemods.portals",
+      "section": "01 Admin",
+      "key": "Enabled",
+      "value": "true"
+    },
+    {
+      "guid": "com.drakemods.portals",
+      "section": "02 Portals",
+      "key": "ManageAccess",
+      "value": "AdminOnly"
+    },
+    {
+      "guid": "com.drakemods.portals",
+      "section": "03 Display",
+      "key": "ShowDirectionTint",
+      "value": "true"
+    }
+  ],
+  "setup": {
+    "timeOfDay": 0.5,
+    "freezeTime": 1,
+    "god": 1,
+    "noBuild": "off",
+    "hideUnlockPopups": 1
+  },
+  "resetBetweenTests": true
+}

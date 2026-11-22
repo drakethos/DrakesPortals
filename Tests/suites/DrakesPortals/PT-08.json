@@ -1,0 +1,140 @@
+{
+  "name": "PT-08 Switched off, portals are vanilla",
+  "description": "",
+  "steps": [
+    {
+      "do": "spawn",
+      "prefab": "portal_wood",
+      "dx": 3,
+      "dz": 3,
+      "as": "a"
+    },
+    {
+      "do": "spawn",
+      "prefab": "portal_wood",
+      "dx": -3,
+      "dz": 3,
+      "as": "b"
+    },
+    {
+      "do": "wait",
+      "seconds": 0.5
+    },
+    {
+      "do": "hook",
+      "name": "portals.setTag",
+      "args": {
+        "tag": "pair",
+        "target": "a"
+      }
+    },
+    {
+      "do": "hook",
+      "name": "portals.setTag",
+      "args": {
+        "tag": "pair",
+        "target": "b"
+      }
+    },
+    {
+      "do": "wait",
+      "seconds": 5
+    },
+    {
+      "do": "hook",
+      "name": "portals.linked",
+      "args": {
+        "target": "a"
+      },
+      "expect": true,
+      "label": "portal A is linked"
+    },
+    {
+      "do": "hook",
+      "name": "portals.linked",
+      "args": {
+        "target": "b"
+      },
+      "expect": true,
+      "label": "portal B is linked",
+      "stop": true
+    },
+    {
+      "do": "hook",
+      "name": "portals.setDirection",
+      "args": {
+        "direction": "Entry",
+        "target": "a"
+      },
+      "expect": true,
+      "label": "ask the server: Entry"
+    },
+    {
+      "do": "wait",
+      "seconds": 1.5
+    },
+    {
+      "do": "setConfig",
+      "values": {
+        "01 Admin/Enabled": "false"
+      }
+    },
+    {
+      "do": "wait",
+      "seconds": 0.5
+    },
+    {
+      "do": "hook",
+      "name": "portals.blocked",
+      "args": {
+        "target": "b"
+      },
+      "expect": false,
+      "label": "the exit no longer refuses players"
+    },
+    {
+      "do": "hook",
+      "name": "portals.canManageHere",
+      "expect": false,
+      "label": "nobody can open the menu"
+    },
+    {
+      "do": "hook",
+      "name": "portals.hover",
+      "args": {
+        "target": "a"
+      },
+      "notContains": "One-way",
+      "label": "the hover text is vanilla"
+    },
+    {
+      "do": "face",
+      "target": "a"
+    },
+    {
+      "do": "interact",
+      "target": "a",
+      "alt": true
+    },
+    {
+      "do": "wait",
+      "seconds": 0.4
+    },
+    {
+      "do": "check",
+      "check": "uiVisible",
+      "name": "Portal direction",
+      "expect": false,
+      "label": "Shift+E opens nothing"
+    },
+    {
+      "do": "closeUi"
+    }
+  ],
+  "asserts": [
+    {
+      "check": "noErrors",
+      "source": "DrakesPortals"
+    }
+  ]
+}

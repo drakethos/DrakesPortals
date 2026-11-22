@@ -1,0 +1,110 @@
+{
+  "name": "PT-06 The hover text says which way a portal goes",
+  "description": "",
+  "steps": [
+    {
+      "do": "spawn",
+      "prefab": "portal_wood",
+      "dx": 3,
+      "dz": 3,
+      "as": "a"
+    },
+    {
+      "do": "spawn",
+      "prefab": "portal_wood",
+      "dx": -3,
+      "dz": 3,
+      "as": "b"
+    },
+    {
+      "do": "wait",
+      "seconds": 0.5
+    },
+    {
+      "do": "hook",
+      "name": "portals.setTag",
+      "args": {
+        "tag": "pair",
+        "target": "a"
+      }
+    },
+    {
+      "do": "hook",
+      "name": "portals.setTag",
+      "args": {
+        "tag": "pair",
+        "target": "b"
+      }
+    },
+    {
+      "do": "wait",
+      "seconds": 5
+    },
+    {
+      "do": "hook",
+      "name": "portals.linked",
+      "args": {
+        "target": "a"
+      },
+      "expect": true,
+      "label": "portal A is linked"
+    },
+    {
+      "do": "hook",
+      "name": "portals.linked",
+      "args": {
+        "target": "b"
+      },
+      "expect": true,
+      "label": "portal B is linked",
+      "stop": true
+    },
+    {
+      "do": "hook",
+      "name": "portals.setDirection",
+      "args": {
+        "direction": "Entry",
+        "target": "a"
+      },
+      "expect": true,
+      "label": "ask the server: Entry"
+    },
+    {
+      "do": "wait",
+      "seconds": 1.5
+    },
+    {
+      "do": "hook",
+      "name": "portals.hover",
+      "args": {
+        "target": "a"
+      },
+      "contains": "One-way",
+      "label": "A says it is the entry"
+    },
+    {
+      "do": "hook",
+      "name": "portals.hover",
+      "args": {
+        "target": "b"
+      },
+      "contains": "Exit only",
+      "label": "B says exit only"
+    },
+    {
+      "do": "hook",
+      "name": "portals.hover",
+      "args": {
+        "target": "a"
+      },
+      "contains": "Shift+E",
+      "label": "the admin sees the menu key"
+    }
+  ],
+  "asserts": [
+    {
+      "check": "noErrors",
+      "source": "DrakesPortals"
+    }
+  ]
+}

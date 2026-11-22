@@ -9,12 +9,11 @@
     <BepInPluginName>DrakesPortals</BepInPluginName>
     <BepInGuid>com.drakemods.portals</BepInGuid>
     <ModInfoClass>DrakesPortals</ModInfoClass>
-    <Description>One-way gates for servers: each portal sends players somewhere and never back. Fixed destinations first; item, team and puzzle destinations later.</Description>
+    <Description>One-way portals for servers. Shift+E on a linked portal makes it an entry or an exit; the portal shows which way it goes.</Description>
     <WebsiteUrl>https://github.com/drakethos/DrakesPortals</WebsiteUrl>
   </PropertyGroup>
   <ItemGroup>
     <ThunderstoreDependency Include="denikson-BepInExPack_Valheim-5.4.2350" />
     <ThunderstoreDependency Include="ValheimModding-Jotunn-2.30.0" />
-    <ThunderstoreDependency Include="DrakeMods-DrakeModsLibs-1.0.6" />
   </ItemGroup>
 </Project>

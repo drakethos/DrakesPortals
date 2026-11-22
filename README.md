@@ -1,38 +1,45 @@
 # DrakesPortals
 
+One-way portals for Valheim servers. Link two portals with the same tag as usual, then press **Shift+E** on one: make it the
+**Entry** and the other becomes the **Exit**. Players walk into the entry and arrive at the exit; the exit does not send them back.
+Each portal says which way it goes (hover text and glow colour).
+
 > [!NOTE]
-> **Stub (0.1.0).** The project, build, packaging and config are in place. The gate itself is not: no portal does anything yet. See [docs/design.md](docs/design.md).
+> **Work in progress (0.1.0).** Written against the Valheim 1.0 assemblies and compile-checked, but not yet run in game. The DrakesTestLab suite
+> in `Tests/` is written and not yet run either. Back up your world before trying it.
 
-One-way gates for Valheim servers. A gate sends a player somewhere and never offers a way back through itself.
-Part of DrakeMods, built on **DrakeModsLibs** (config sync, UI) with **ModGuard** (isolated patching and attributed errors).
+## Use
 
-## Idea
+1. Build two portals and give them the same tag (vanilla).
+2. Shift+E on one portal opens **Portal direction**: Two-way, One-way: Entry, One-way: Exit.
+3. Choosing one makes the linked portal the opposite end. Two-way puts both back.
 
-- Every gate is one way. Direction is not an option; the rules around it are.
-- A gate asks a **destination resolver** where to send the player. 0.1.0 has one: **Fixed** (a configured position).
-- Later resolvers: held item, team or global key, random, puzzle. The portal code does not change when one is added.
-- Planned rules: who may enter (team via DrakesServerTeams, boss kills), use limits per player, admin-only gates.
-
-## Install
-
-Needs BepInEx, Jotunn and DrakeModsLibs. On a dedicated server, install it on the server and every client.
-DrakesServerTeams is optional (team gates only).
+- **Who can change directions** (`ManageAccess`): `AdminOnly` (default) or `Everyone`. Synced from the server; the server checks every request.
+- **Enabled**: master switch (synced). Off = every portal works like vanilla; directions are kept but ignored.
+- **Display** (this device only): tint the glow by direction, and the two colours.
+- Plain **E** is still the vanilla tag prompt.
 
 ## Settings
 
-Synced from the server (`BepInEx/config/com.drakemods.portals.cfg`): `Enabled`, `DefaultResolver`, `FixedDestination`
-(`x,y,z`), and the admin lock `LockSyncedConfig`.
+`BepInEx/config/com.drakemods.portals.cfg`. The server's `Enabled` and `ManageAccess` reach every client (Jotunn's config sync) and only
+admins can change them in game. `UseToolkitUi` (client) switches the menu between the new look and the classic wood panel.
+
+## Install
+
+Needs BepInEx and Jotunn. No other DrakeMods are required. On a dedicated server install it on the server and on every client
+(it is network-checked).
+
+If DrakeModsLibs is also installed, DrakesPortals claims portal pieces so RenameIt's piece rename leaves Shift+E on portals alone.
+
+## Limits
+
+- The block on exit portals runs in the client's game, like every portal rule. It stops players using the mod, not a modified client.
+- Directions need a linked pair (same tag). Unlinked portals can only be two-way.
+- A portal changed while its partner is far away is written by the server to both, so both ends update together.
 
 ## Building
 
-Settings come from `mod.package.props` (name, version, GUID, dependencies). Machine paths come from `environment.props`
-(gitignored); copy `environment.props.example` (Windows) or `environment.props.example.linux`.
-
-**Windows:** open `DrakesPortals.sln` in Visual Studio, or `msbuild DrakesPortals.csproj`. A build deploys the DLL to the
-Gale and r2modman profile named by `ProfileName`, and writes the Thunderstore folder and zip.
-
-**Linux:** `build/scripts/build-linux.sh [Debug|Release]`. It restores NuGet, stages the game references from the
-Pfhoenix package (no Valheim install needed), builds DrakeModsLibs at the pinned tag, builds the mod and writes
-`dist/DrakeMods-DrakesPortals-<version>.zip`. Needs dotnet SDK 8, nuget, git, zip, python3 and jq.
-
-**Releases:** push a tag `vX.Y.Z` that matches `<Version>` in `mod.package.props`; CI builds and publishes to Hexium.
+Built from the [DrakesModStub](https://github.com/drakethos/DrakesModStub) template with its Ui module. Self-contained: no DrakeModsLibs.
+Machine paths in `environment.props` (copy `environment.props.example`, or `.linux`). Windows: Visual Studio / `msbuild DrakesPortals.csproj`.
+Linux: `build/scripts/build-linux.sh`. Tag `vX.Y.Z` (matching `<Version>`) to release to Hexium.
+Tests: see `Tests/README.md`.

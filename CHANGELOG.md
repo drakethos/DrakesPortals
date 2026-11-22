@@ -2,11 +2,10 @@
 
 ## 0.1.0
 
-Stub only; nothing in-game yet.
+First version (not released yet).
 
-- Project set up like the other DrakeMods: shared build props, Gale and r2modman deploy, Thunderstore-format zip, Hexium release workflow.
-- Synced config through DrakeModsLibs (`DrakeConfigSync`).
-- ModGuard vendored (isolated patching, attributed errors, compat report).
-- Destination resolver interface with one resolver, **Fixed**.
-- Soft link to DrakesServerTeams.
-- Linux build script alongside the Windows build.
+- One-way portals on a linked pair: **Entry** and **Exit**, set with Shift+E (Two-way, One-way Entry, One-way Exit). Choosing one sets the linked portal to the opposite end.
+- An exit portal refuses players. The hover text says which way a portal goes; the glow is tinted by direction (this device only, configurable).
+- `ManageAccess` (AdminOnly or Everyone) and `Enabled`, synced from the server; the server checks who is asking and that the pair is linked.
+- Menu built with the template's standalone UI module; no DrakeModsLibs needed.
+- DrakesTestLab suite (11 tests) and `portals.*` test hooks (Debug builds).

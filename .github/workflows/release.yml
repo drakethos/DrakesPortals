@@ -70,7 +70,6 @@ jobs:
       #      and disables FrameworkPathOverride so the build uses real MS assemblies.
       #    • JotunnLib — Jotunn.dll + JotunnLib.props (corlib HintPaths)
       #    • Pfhoenix.Valheim.ModProjectReferences — game DLLs for compile refs
-      #  DrakeModsLibs (ArtItemLoader + DrakeConfigSync) is built from git below.
       - name: Restore NuGet packages
         run: |
           nuget restore DrakesPortals.csproj -PackagesDirectory packages
@@ -115,39 +114,6 @@ jobs:
 
           echo "VALHEIM_INSTALL=$(pwd)/ci_valheim" >> "$GITHUB_ENV"
 
-      # Compile against DrakeModsLibs (ArtItemLoader). Prefer published 0.9.2+;
-      # until the store zip is available this still builds tip of DrakesWorkshopLibs.
-      - name: Build DrakeModsLibs for compile
-        env:
-          CI_NET48_FWPATH: ${{ github.workspace }}/packages/Microsoft.NETFramework.ReferenceAssemblies.net48.1.0.3/build
-          CI_SKIP_POST_BUILD: "true"
-        run: |
-          set -euo pipefail
-          # Compile against the Libs release DrakesPortals is pinned to (must match the DrakeModsLibs version in mod.package.props).
-          git clone --depth 1 --branch v1.0.6 https://github.com/drakethos/DrakesWorkshopLibs.git ci_libs/DrakeModsLibsSrc
-          nuget restore ci_libs/DrakeModsLibsSrc/DrakeModsLibs.csproj -PackagesDirectory ci_libs/DrakeModsLibsSrc/packages
-          CI_ROOT="$(pwd)/ci_valheim"
-          MANAGED="$CI_ROOT/valheim_Data/Managed"
-          export VALHEIM_INSTALL="$CI_ROOT"
-          dotnet msbuild ci_libs/DrakeModsLibsSrc/DrakeModsLibs.csproj \
-            /p:Configuration=Release \
-            /p:TargetFrameworkVersion=v4.8 \
-            /p:BepInExPath="$CI_ROOT/BepInEx" \
-            /p:CorlibPath="$MANAGED" \
-            /p:PublicizedAssembliesPath="$MANAGED/publicized_assemblies" \
-            /p:CI_NET48_FWPATH="$CI_NET48_FWPATH" \
-            /p:CI_SKIP_POST_BUILD=true \
-            /t:Build \
-            /v:minimal
-          DLL=$(find ci_libs/DrakeModsLibsSrc -path '*/bin/Release/DrakeModsLibs.dll' | head -1)
-          if [ -z "$DLL" ]; then
-            echo "ERROR: DrakeModsLibs.dll missing after build" >&2
-            find ci_libs/DrakeModsLibsSrc -name '*.dll' >&2
-            exit 1
-          fi
-          echo "DrakeModsLibs DLL: $DLL"
-          echo "WORKSHOP_LIBS_DLL=$DLL" >> "$GITHUB_ENV"
-
       # ── Build (Release) ─────────────────────────────────────────────────────
       #  dotnet msbuild: Roslyn from .NET 8 → C# 10.
       #  Directory.Build.props (repo file) reads CI_NET48_FWPATH → sets
@@ -168,7 +134,6 @@ jobs:
             /p:BepInExPath="$CI_ROOT/BepInEx" \
             /p:CorlibPath="$MANAGED" \
             /p:PublicizedAssembliesPath="$MANAGED/publicized_assemblies" \
-            /p:WorkshopLibsDll="$WORKSHOP_LIBS_DLL" \
             /p:Version="${{ steps.ver.outputs.version }}" \
             /t:Build \
             /v:minimal

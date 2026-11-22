@@ -1,37 +1,25 @@
 # DrakesPortals design
 
 ## Core rule
-Every gate is one way. A gate has an entry and sends the player to a destination. It never offers a way back through
-itself. Everything else (who, how often, where to) is a rule around that.
+A linked portal pair can be one way. One end is the **Entry** (players step in and arrive at the other), the other is the **Exit**
+(arrival only; stepping into it is refused). Direction is stored on each portal's ZDO (`DrakesPortals_direction`: 0 two-way, 1 entry,
+2 exit), so every client sees it.
 
-## Resolvers
-`IDestinationResolver.Resolve(ResolveContext)` returns a position and rotation, or a refusal message shown to the player.
-`ResolverRegistry` maps a name to a resolver; other mods can register theirs at startup.
+## Parts
+- `Core/`: direction enum, the access rule (`PortalAccess.CanManage(isAdmin)`), reading state (`PortalState`).
+- `Net/PortalNet`: a routed RPC to the server. The server checks the sender (ManageAccess, admin list), that the ZDO is a portal,
+  that one-way has a linked partner, then writes both ends (the partner gets the opposite direction).
+- `Patches/`: `TeleportWorld.Teleport` (refuse on an exit), `Interact` (Shift+E opens the menu), `GetHoverText` (says which way),
+  `Update` (glow tint), `Game.Start` (registers the RPC and the soft Libs claim).
+- `Menu/PortalMenu`: the Shift+E menu on the template's standalone UI module.
+- Config: Jotunn's sync (`IsAdminOnly`) for `Enabled` and `ManageAccess`; display options are per client.
 
-| Resolver | Status | Behaviour |
-|---|---|---|
-| Fixed | in 0.1.0 | Configured `x,y,z` |
-| Item | idea | Held item picks the destination |
-| Condition | idea | Team, global key, time of day, use count |
-| Random / weighted | idea | Pick from a list |
-| Puzzle | idea | World state (switch, pedestal item) |
-| Chain | idea | Try one, fall back to the next |
+## Not done (next)
+- Per-portal "who may enter" (team via DrakesServerTeams, boss kills), use limits per player, admin-only gates.
+- Destination resolvers (fixed position, item, condition, puzzle) so a portal needs no partner; see the earlier design notes in the changelog history.
+- Secret door portals.
 
-Build the second resolver before fixing the interface; it will show what `ResolveContext` is missing.
-
-## Possible triggers (not decided)
-- A vanilla portal piece (entry), with no exit piece needed.
-- A door (a hidden or admin-assigned "secret" gate).
-- An invisible trigger zone.
-
-## Rules to add after the first gate works
-- Who may enter: team (DrakesServerTeams, soft), boss kills (global keys), admin only.
-- Per-player use limits (once ever, N times, per day), stored on the server.
-- Point of no return: optionally reset bed/respawn to the landing area.
-
-## Open questions (check before coding)
-- Valheim portals are largely client-driven. Can the server enforce a gate, or must it be on every client with the server
-  as authority for per-player data? Verify against the Valheim 1.0 assemblies.
-- Which patch target stops a player using the entry a second time without breaking vanilla portals?
-- Dungeon destinations depend on chunk loading; does a named location load in time?
-- Whether ModGuard should move into DrakeModsLibs. Today it only exists as a vendored copy in DrakesRenameIt (Libs 1.0.6 has none), so this repo carries its own copy in `Defense/ModGuard.cs` under `DrakesPortals.Defense`.
+## Open questions
+- Portal rules run in the client (as in vanilla); a modified client can ignore the exit block.
+- The glow tint sets `TeleportWorld.m_colorTargetfound`; whether every part of the effect follows it needs a look in game.
+- Linking is done by the game some seconds after tags match; the menu only offers one-way once `HaveTarget()` is true.

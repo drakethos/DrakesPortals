@@ -2,7 +2,7 @@ using System.Reflection;
 using System.Runtime.InteropServices;
 
 [assembly: AssemblyTitle("DrakesPortals")]
-[assembly: AssemblyDescription("One-way gates for servers: send players somewhere and never back.")]
+[assembly: AssemblyDescription("Template mod.")]
 [assembly: AssemblyConfiguration("")]
 [assembly: AssemblyCompany("DrakeMods")]
 [assembly: AssemblyProduct("DrakesPortals")]
@@ -10,4 +10,4 @@ using System.Runtime.InteropServices;
 [assembly: AssemblyTrademark("")]
 [assembly: AssemblyCulture("")]
 [assembly: ComVisible(false)]
-[assembly: Guid("7C0A4D52-3E19-4B6F-9A21-D8E5F10B3C47")]
+[assembly: Guid("8EFAE4BF-6412-4CBF-A19B-5ACDEB2F6CD3")]

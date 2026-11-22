@@ -8,7 +8,7 @@
   <PropertyGroup>
     <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
     <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
-    <ProjectGuid>{7C0A4D52-3E19-4B6F-9A21-D8E5F10B3C47}</ProjectGuid>
+    <ProjectGuid>{8EFAE4BF-6412-4CBF-A19B-5ACDEB2F6CD3}</ProjectGuid>
     <OutputType>Library</OutputType>
     <AppDesignerFolder>Properties</AppDesignerFolder>
     <TargetFrameworkVersion>v4.8.1</TargetFrameworkVersion>
@@ -70,14 +70,24 @@
   <ItemGroup>
     <Compile Include="DrakesPortals.cs" />
     <Compile Include="DrakesPortalsConfig.cs" />
-    <Compile Include="Core\PortalRule.cs" />
-    <Compile Include="Core\IDestinationResolver.cs" />
-    <Compile Include="Core\FixedDestinationResolver.cs" />
-    <Compile Include="Core\ResolverRegistry.cs" />
-    <Compile Include="Compat\ServerTeams\TeamsBridge.cs" />
-    <Compile Include="Patches\PortalPatches.cs" />
+    <Compile Include="Core\PortalDirection.cs" />
+    <Compile Include="Core\PortalAccess.cs" />
+    <Compile Include="Core\PortalState.cs" />
+    <Compile Include="Net\PortalNet.cs" />
+    <Compile Include="Patches\TeleportWorldPatches.cs" />
+    <Compile Include="Patches\GamePatches.cs" />
+    <Compile Include="Menu\PortalMenu.cs" />
+    <Compile Include="Integration\LibsClaims.cs" />
     <Compile Include="Defense\ModGuard.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="Testing\PortalsTestHooks.cs" Condition="'$(Configuration)' == 'Debug'" />
+  </ItemGroup>
+  <ItemGroup Condition="Exists('Ui')">
+    <Compile Include="Ui\**\*.cs" />
+    <Reference Include="UnityEngine.UI"><HintPath>$(CorlibPath)\UnityEngine.UI.dll</HintPath></Reference>
+    <Reference Include="UnityEngine.UIElementsModule"><HintPath>$(CorlibPath)\UnityEngine.UIElementsModule.dll</HintPath></Reference>
+    <Reference Include="UnityEngine.TextCoreTextEngineModule"><HintPath>$(CorlibPath)\UnityEngine.TextCoreTextEngineModule.dll</HintPath></Reference>
+    <Reference Include="UnityEngine.TextCoreFontEngineModule"><HintPath>$(CorlibPath)\UnityEngine.TextCoreFontEngineModule.dll</HintPath></Reference>
   </ItemGroup>
   <ItemGroup>
     <None Include="App.config" />

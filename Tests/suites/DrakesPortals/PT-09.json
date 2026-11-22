@@ -1,0 +1,60 @@
+{
+  "name": "PT-09 ManageAccess: admin only or everyone",
+  "description": "",
+  "steps": [
+    {
+      "do": "setConfig",
+      "values": {
+        "02 Portals/ManageAccess": "AdminOnly"
+      }
+    },
+    {
+      "do": "hook",
+      "name": "portals.canManage",
+      "args": {
+        "admin": false
+      },
+      "expect": false,
+      "label": "AdminOnly: a normal player cannot"
+    },
+    {
+      "do": "hook",
+      "name": "portals.canManage",
+      "args": {
+        "admin": true
+      },
+      "expect": true,
+      "label": "AdminOnly: an admin can"
+    },
+    {
+      "do": "setConfig",
+      "values": {
+        "02 Portals/ManageAccess": "Everyone"
+      }
+    },
+    {
+      "do": "hook",
+      "name": "portals.canManage",
+      "args": {
+        "admin": false
+      },
+      "expect": true,
+      "label": "Everyone: a normal player can"
+    },
+    {
+      "do": "hook",
+      "name": "portals.canManage",
+      "args": {
+        "admin": true
+      },
+      "expect": true,
+      "label": "Everyone: an admin can"
+    }
+  ],
+  "asserts": [
+    {
+      "check": "noErrors",
+      "source": "DrakesPortals"
+    }
+  ]
+}
